@@ -4,6 +4,7 @@
 #include <QProcess>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDebug> // Add for debugging
 
 FileOperations::FileOperations()
 {
@@ -12,6 +13,11 @@ FileOperations::FileOperations()
 QStringList FileOperations::scanFolders(const QString &mainFolder, bool recursive)
 {
     QStringList folders;
+
+    // Always include the main folder itself when recursive is enabled
+    if (recursive) {
+        folders.append(mainFolder); // Add the main folder
+    }
 
     if (!recursive) {
         QDir dir(mainFolder);
@@ -44,13 +50,19 @@ QStringList FileOperations::getMediaFiles(const QString &folderPath, const QStri
     QStringList files = dir.entryList(QDir::Files);
     QStringList mediaFiles;
 
+    qDebug() << "Scanning folder:" << folderPath;
+    qDebug() << "Files found:" << files;
+    qDebug() << "Looking for extensions:" << extensions;
+
     for (const QString &file : files) {
         QString ext = "." + QFileInfo(file).suffix().toLower();
         if (extensions.contains(ext)) {
+            qDebug() << "Found media file:" << file << "with extension:" << ext;
             mediaFiles.append(file);
         }
     }
 
+    qDebug() << "Media files found:" << mediaFiles;
     return mediaFiles;
 }
 

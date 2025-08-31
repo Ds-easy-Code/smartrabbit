@@ -128,7 +128,7 @@ QDateEdit:focus {
       <item>
        <widget class="QCheckBox" name="recursive_cb">
         <property name="text">
-         <string>Childfolder</string>
+         <string>Include current folder and subfolders</string>
         </property>
        </widget>
       </item>

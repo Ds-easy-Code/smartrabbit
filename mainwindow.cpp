@@ -104,6 +104,8 @@ void MainWindow::scanFolders()
     folders = fileOperations.scanFolders(mainFolder, recursive);
     currentFolderIndex = 0;
 
+    qDebug() << "Folders found:" << folders;
+
     if (!folders.isEmpty()) {
         ui->status->setText(QString("Found %1 folders").arg(folders.size()));
         updateFolderDisplay();
@@ -129,8 +131,13 @@ void MainWindow::updateFolderDisplay()
     QString folderName = QFileInfo(currentFolder).fileName();
     ui->folder_info->setText(QString("%1 (%2/%3)").arg(folderName).arg(currentFolderIndex + 1).arg(folders.size()));
 
+    qDebug() << "Loading media files from folder:" << currentFolder;
+
     // Load media files
     mediaFiles = fileOperations.getMediaFiles(currentFolder, supportedExtensions);
+
+    qDebug() << "Media files found:" << mediaFiles;
+
     currentMediaIndex = 0;
     updateMediaDisplay();
     updateButtonStates();
@@ -144,6 +151,7 @@ void MainWindow::updateMediaDisplay()
         ui->media_display->setPixmap(QPixmap());
         ui->play_btn->setEnabled(false);
         ui->media_display->setCursor(Qt::ArrowCursor);
+        qDebug() << "No media files to display";
         return;
     }
 
@@ -151,9 +159,13 @@ void MainWindow::updateMediaDisplay()
     QString currentFolder = folders[currentFolderIndex];
     QString mediaPath = currentFolder + "/" + currentFile;
 
+    qDebug() << "Displaying media file:" << mediaPath;
+
     // Check if video
     QString ext = QFileInfo(currentFile).suffix().toLower();
     bool isVideo = configManager.getVideoExtensions().contains("." + ext);
+
+    qDebug() << "File extension:" << ext << "Is video:" << isVideo;
 
     // Load media
     if (isVideo) {
@@ -167,8 +179,10 @@ void MainWindow::updateMediaDisplay()
             QPixmap scaled = pixmap.scaled(ui->media_display->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             ui->media_display->setPixmap(scaled);
             ui->media_display->setText("");
+            qDebug() << "Image loaded successfully";
         } else {
             ui->media_display->setText("Failed to load image: " + currentFile);
+            qDebug() << "Failed to load image:" << mediaPath;
         }
         ui->media_display->setCursor(Qt::ArrowCursor);
     }
@@ -178,8 +192,6 @@ void MainWindow::updateMediaDisplay()
     updateButtonStates();
 }
 
-// ... rest of your existing methods (on_prev_folder_btn_clicked, on_next_folder_btn_clicked, etc.)
-// ... keep all your other existing methods unchanged
 void MainWindow::on_prev_folder_btn_clicked()
 {
     if (currentFolderIndex > 0) {

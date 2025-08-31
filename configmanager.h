@@ -31,9 +31,8 @@ private:
     QString mainFolder;
     bool recursive = false;
     bool skipDeleteConfirmation = false;
-
     QStringList imageExtensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"};
-    QStringList videoExtensions = {".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv"};
+    QStringList videoExtensions = {".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv", ".m4v", ".webm"};
 };
 
 #endif // CONFIGMANAGER_H

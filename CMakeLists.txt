@@ -71,3 +71,14 @@ install(TARGETS smartrabbit
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(smartrabbit)
 endif()
+
+# Add WebP support
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Gui REQUIRED)
+
+# For Qt6, WebP is often included in imageformats plugin
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Gui Svg REQUIRED)
+else()
+    # For Qt5, you might need to compile WebP plugin separately
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Gui Svg REQUIRED)
+endif()
